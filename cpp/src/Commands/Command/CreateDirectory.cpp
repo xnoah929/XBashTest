@@ -21,9 +21,9 @@ bool CreateDirectory::Execute(){
         // Create an argument list in char *[] form.
         // In summary it is a pointer to array of pointers to array of characters.
         char **pVargs = new char * [numArgs + 1];
-        for (long ct = 1, index = 0; ct < numArgs; ct++, index++) {
-            pVargs[index] = new char[vargs[ct].length() + 1];
-            strcpy(pVargs[index], vargs[ct].c_str());
+        for (long ct = 0; ct < numArgs; ct++) {
+            pVargs[ct] = new char[vargs[ct].length() + 1];
+            strcpy(pVargs[ct], vargs[ct].c_str());
         }  
 
         // last item in the char *[] has to be null
@@ -31,7 +31,7 @@ bool CreateDirectory::Execute(){
         commandOutput = RunCommand(CreateDirectory::CreateDirectoryCommand(), pVargs);
 
          // 99% of the time when you new something you have to also delete it.  We do the delete here.
-         for (long ct = 0; ct < numArgs; ct++) {
+         for (long ct = 0; ct <= numArgs; ct++) {
              delete pVargs[ct];
          }
          delete [] pVargs;
