@@ -6,7 +6,7 @@ HelpText::HelpText() {
 
 const std::ostringstream& HelpText::TheText() {
     // Here we put all the text we need in the help
-    std::ostringstream text;
+    static std::ostringstream text;
     text << "Welcome to the XBash Interface Help." << std::endl
         << "This should be a module itself for --help command in xbash" << std::endl;
     return text;

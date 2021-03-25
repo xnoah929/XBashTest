@@ -1,16 +1,17 @@
 #include <iostream>
 #include <fstream>
 #include "HelpText.h"
-#include "CommandFactory.h"
+#include "Commands.h"
+
 
 int main(int argc, char *argv[]) {
     std::string inputCommand;
+    std::string outputCommand;
     HelpText helpText;
     // Exit state for processing commands.
     bool notDone = true;
     // If someone runs this program with any input
     // we want to put up the help information.
-    CommandFactory commandFactory;
     if (argc > 1) {
         std::cout << helpText
         << "argc = " << argc << "argv = " << *argv[0] << std::endl << helpText;
@@ -18,7 +19,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Now we start getting some input.
-    while(notDone) {
+    while (notDone) {
         std::cout << ">>$ ";
         std::getline(std::cin, inputCommand);
         
@@ -27,13 +28,14 @@ int main(int argc, char *argv[]) {
             break;
         }
 
-        Command *command = commandFactory.CreateCommand(inputCommand);
-        if (!command->Execute()) {
+        Commands commands(inputCommand);
+        if (commands.Run(outputCommand)) {
             std::cout << "Command Line Failed " << inputCommand << std::endl;
-            std::cout << "More information " << command->CommandOutput() << std::endl;
+            std::cout << "More information " << outputCommand << std::endl;
         } else {
-            std::cout << command->CommandOutput() << std::endl;
+            std::cout << outputCommand << std::endl;
         }
+
     }
 
     return 0;

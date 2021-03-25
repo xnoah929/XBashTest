@@ -5,7 +5,8 @@ CreateDirectory::CreateDirectory(const std::string &commandLine) : Command(comma
 
 bool CreateDirectory::Execute(){
     // Will assume we have failed with standard Unix 0 is ok and anything else is failed.
-    failed = true;
+    // Need to implement more rigging in the base implementation to tell if the command worked.
+    failed = false;
 
     // Need to parse and transform arguments because Unix/Linux is not written in C++.
     std::vector<std::string> vargs;
@@ -20,14 +21,20 @@ bool CreateDirectory::Execute(){
         // Create an argument list in char *[] form.
         // In summary it is a pointer to array of pointers to array of characters.
         char **pVargs = new char * [numArgs + 1];
-        for(long ct = 1, index = 0; ct < numArgs; ct++, index++) {
-            pVargs[index] = new char[vargs[ct].length() + 1];
-            strcpy(pVargs[index], vargs[ct].c_str());
+        for (long ct = 0; ct < numArgs; ct++) {
+            pVargs[ct] = new char[vargs[ct].length() + 1];
+            strcpy(pVargs[ct], vargs[ct].c_str());
         }  
 
         // last item in the char *[] has to be null
         pVargs[numArgs] = nullptr;
         commandOutput = RunCommand(CreateDirectory::CreateDirectoryCommand(), pVargs);
+
+         // 99% of the time when you new something you have to also delete it.  We do the delete here.
+         for (long ct = 0; ct <= numArgs; ct++) {
+             delete pVargs[ct];
+         }
+         delete [] pVargs;
     }
 
     return failed;
