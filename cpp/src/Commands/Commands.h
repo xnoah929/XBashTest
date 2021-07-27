@@ -2,13 +2,15 @@
 #define __Commands_h__
 
 #include <iostream>
+#include <memory>
 #include "CommandFactory.h"
 #include "Command.h"
 
-class Commands {
+class Commands 
+{
     public:
         Commands(const std::string &commands);
-        bool Run(std::string &output);
+        bool run(std::string &output);
     
     private:
         const std::string origCommands;

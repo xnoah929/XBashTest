@@ -6,18 +6,22 @@
 #include <unordered_map>
 #include <cstddef>
 #include <stdexcept>
+#include <memory>
 #include "Command.h"
 #include "CreateDirectory.h"
 
-class CommandFactory {
+enum class CommandType{MISSING, CREATE_DIRECTORY, SALT};
+
+class CommandFactory 
+{
     public:
         CommandFactory();
-        Command* CreateCommand(const std::string &commandLine);
+        std::unique_ptr<Command> createCommand(const std::string &commandLine);
     
     private:
-        const std::string origCommand;
-        std::unordered_map<std::string, int> supportedCommands;
-        const std::string ParseCommand( const std::string &commandLine);
+        const std::string origCommand_;
+        std::unordered_map<std::string, CommandType> supportedCommands_;
+        const std::string parseCommand( const std::string &commandLine);
 };
 
 #endif

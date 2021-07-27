@@ -1,21 +1,28 @@
 #include "Commands.h"
 
 
-Commands::Commands(const std::string &commands) : origCommands(commands) {
+Commands::Commands(const std::string &commands) : origCommands(commands) 
+{
 }
 
-bool Commands::Run(std::string &output) {
+bool Commands::run(std::string &output) 
+{
     bool failed = true;
     CommandFactory commandFactory;
-    Command *command = commandFactory.CreateCommand(origCommands);
-    if (command->Execute()) {        
+
+    // Command Factory always constructs an object so we don't have to worry about nullptr issues.
+    std::unique_ptr<Command> command = commandFactory.createCommand(origCommands);
+
+    if (command->execute()) 
+    {        
         failed = true;
-    } else {
+    } 
+    else 
+    {
         failed = false;
     } 
-    output = command->CommandOutput();
+
+    output = command->commandOutput();
     
-    // Factory created pointer and we must handle it here.
-    delete command;
     return failed;    
 }

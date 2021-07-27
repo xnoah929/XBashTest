@@ -9,14 +9,14 @@
 class CreateDirectory : public Command {
     public:
         CreateDirectory(const std::string &commandLine);
-        virtual bool Execute();
-        virtual std::string CommandHelp();
-        virtual std::string CommandOutput();
-        static const std::string& CreateDirectoryCommand();
+        virtual bool execute() override;
+        virtual std::string commandHelp() override;
+        virtual std::string commandOutput() override;
+        static const std::string& createDirectoryCommand();
 
     private:
-        bool failed;
-        std::string commandOutput;
+        bool failed_;
+        std::string commandOutput_;
 };
 
 #endif

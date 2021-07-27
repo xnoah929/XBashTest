@@ -1,29 +1,35 @@
 # include "Command.h"
 
-Command::Command(const std::string &commands) : origCommands(commands){   
+Command::Command(const std::string &commands) : origCommands(commands)
+{   
 }
 
-bool Command::Execute() {
+bool Command::execute() 
+{
     // Creating concrete parent class so fail if forget to implement.
     return true;
 }
 
-std::string Command::CommandHelp() {
+std::string Command::commandHelp() 
+{
     // Creating concrete parent class so message if forget to implement.
     return "Help is not implemented!";
 }
 
-std::string Command::CommandOutput() {
+std::string Command::commandOutput() 
+{
     // Creating concrete parent class so message if forget to implement.
     return "Command Output is not implemented!";
 }
 
-const std::string Command::RunCommand(const std::string &command, char *args[]) {
+const std::string Command::runCommand(const std::string &command, char *args[]) 
+{
     int pipefd[2];
     pipe(pipefd);
     std::string response;
 
-    if (fork() == 0) {
+    if (fork() == 0) 
+    {
         // child fork
 
         //ask kernel to deliver SIGTERM in case the parent dies
@@ -59,14 +65,15 @@ const std::string Command::RunCommand(const std::string &command, char *args[]) 
     return response;
 }
 
-long Command::ConvertArguments(const std::string &args, std::vector<std::string> &vargs, const char ch)
+long Command::convertArguments(const std::string &args, std::vector<std::string> &vargs, const char ch)
 {
     size_t pos = args.find( ch );
     size_t initialPos = 0;
     vargs.clear();
 
     // Parse the string to vector (tokens)
-    while( pos != std::string::npos ) {
+    while( pos != std::string::npos ) 
+    {
         vargs.push_back( args.substr( initialPos, pos - initialPos ) );
         initialPos = pos + 1;
 
