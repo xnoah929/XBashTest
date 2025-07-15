@@ -56,9 +56,21 @@ const std::string Command::runCommand(const std::string &command, char *args[])
         // close the parent end from writing to the pipe 
         close(pipefd[1]);
 
-        while (read(pipefd[0], buffer, sizeof(buffer)) != 0)
+        while (ssize_t bytesRead = read(pipefd[0], buffer, sizeof(buffer)))
         {
-            response += buffer;
+            if (bytesRead > 0)
+            {
+                std::string chunk(buffer, bytesRead);
+                // Remove ANSI escape codes using regex
+                chunk = std::regex_replace(chunk, std::regex("\x1B\\[[0-9;]*[A-Za-z]"), "");
+                // Optionally, filter out non-ASCII characters
+                chunk.erase(std::remove_if(chunk.begin(), chunk.end(), [](unsigned char c)
+                {
+                    // Keep printable ASCII, LF (\n, 10), CR (\r, 13), and NUL (\0)
+                    return !( (c >= 32 && c <= 126) || c == 10 || c == 13 || c == 0 );
+                }), chunk.end());
+                response += chunk;
+            }
         }
     }
 

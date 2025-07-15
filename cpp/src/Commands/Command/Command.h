@@ -1,7 +1,9 @@
 #ifndef __Command_h__
 #define __Command_h__
 
+#include <algorithm>
 #include <iostream>
+#include <regex>
 #include <vector>
 
 extern "C" 
